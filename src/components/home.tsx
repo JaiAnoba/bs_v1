@@ -36,6 +36,8 @@ const HomePage = () => {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [activeTab, setActiveTab] = useState("active");
   const [createBillDialogOpen, setCreateBillDialogOpen] = useState(false);
+  const [upgradeToPremiumDialogOpen, setUpgradeToPremiumDialogOpen] =
+    useState(false);
 
   // Mock user profile data
   const [userProfile, setUserProfile] = useState<UserProfile>({
@@ -185,7 +187,16 @@ const HomePage = () => {
               <Button variant="ghost" className="justify-start">
                 <User className="mr-2 h-4 w-4" /> Profile
               </Button>
-              <Button variant="ghost" className="justify-start">
+              <Button
+                variant="ghost"
+                className="justify-start"
+                onClick={() => {
+                  // In a real app, this would call an auth service logout method
+                  console.log("Logging out...");
+                  // Redirect to login page
+                  window.location.href = "/auth";
+                }}
+              >
                 <LogOut className="mr-2 h-4 w-4" /> Logout
               </Button>
             </div>
@@ -218,7 +229,12 @@ const HomePage = () => {
                         participants per bill.
                       </p>
                     </div>
-                    <Button variant="outline">Upgrade to Premium</Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => setUpgradeToPremiumDialogOpen(true)}
+                    >
+                      Upgrade to Premium
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -258,6 +274,53 @@ const HomePage = () => {
             onSubmit={handleCreateBill}
             userType={userProfile.userType}
           />
+        </DialogContent>
+      </Dialog>
+
+      {/* Upgrade to Premium Dialog */}
+      <Dialog
+        open={upgradeToPremiumDialogOpen}
+        onOpenChange={setUpgradeToPremiumDialogOpen}
+      >
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Upgrade to Premium</DialogTitle>
+            <DialogDescription>
+              Unlock all features with our Premium plan.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="rounded-lg border p-4">
+              <h3 className="text-lg font-medium">Premium Plan</h3>
+              <p className="text-sm text-muted-foreground mt-1">$9.99/month</p>
+              <ul className="mt-4 space-y-2 text-sm">
+                <li className="flex items-center">✓ Unlimited bills</li>
+                <li className="flex items-center">
+                  ✓ Unlimited participants per bill
+                </li>
+                <li className="flex items-center">
+                  ✓ Advanced expense splitting options
+                </li>
+                <li className="flex items-center">✓ Export bills to PDF</li>
+                <li className="flex items-center">✓ Priority support</li>
+              </ul>
+            </div>
+            <Button
+              className="w-full"
+              onClick={() => {
+                // In a real app, this would open a payment form or redirect to a payment processor
+                console.log("Processing upgrade to premium...");
+                // For demo purposes, we'll just update the user profile
+                setUserProfile({
+                  ...userProfile,
+                  userType: "Premium",
+                });
+                setUpgradeToPremiumDialogOpen(false);
+              }}
+            >
+              Upgrade Now
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
